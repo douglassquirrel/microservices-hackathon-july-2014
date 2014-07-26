@@ -11,4 +11,5 @@ public class ClientResource {
         return new ClientView();
     }
 
+
 }
