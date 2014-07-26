@@ -1,0 +1,9 @@
+server:
+  type: simple
+  applicationContextPath: /
+
+logging:
+  level: INFO
+  appenders:
+      - type: console
+

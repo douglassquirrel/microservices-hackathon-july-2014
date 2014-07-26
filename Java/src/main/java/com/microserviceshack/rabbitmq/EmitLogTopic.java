@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microserviceshack.Config;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
@@ -54,7 +53,7 @@ public class EmitLogTopic {
 	  return "ivan";
   }
 
-  private static String getMessage(String[] strings) throws JsonGenerationException, JsonMappingException, IOException{ 
+  private static String getMessage(String[] strings) throws JsonGenerationException, JsonMappingException, IOException{
 //    if (strings.length < 2)
 //    	    return "Hello World!";
 //    return joinStrings(strings, " ", 1);
