@@ -68,7 +68,7 @@ public class ChatResource {
                     String help = "";
                     CMD[] values = CMD.values();
                     for (CMD value : values) {
-                        help+=value.name()+" ";
+                        help+=value.name().toLowerCase()+" ";
                     }
                     return new Response(message.author, help);
                 }
