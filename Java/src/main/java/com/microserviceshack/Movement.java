@@ -185,8 +185,9 @@ public class Movement {
 			if (response) {
 				room_name = (String) message.getDetails().get("room_name");
 				System.out.println("Room is " + room_name);
+			} else {
+				response = message.getTopic().equals("movement_failed");
 			}
-
 		}
 
 		return room_name;
