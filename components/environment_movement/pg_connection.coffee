@@ -12,11 +12,7 @@ module.exports.getPreviousData = (callback)->
             if(err)
                 console.error('error running query', err);
                 
-
-            row_data = result.rows.map((row)->
-                 return row.content
-                )
-            callback(row_data)
+            callback(result.rows)
 
             client.end();
         )
