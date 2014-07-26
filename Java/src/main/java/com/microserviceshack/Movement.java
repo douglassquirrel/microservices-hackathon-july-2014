@@ -171,15 +171,15 @@ public class Movement {
 		return result;
 	}
 
-	public String getMovementResponse(Movement movement,
-			QueueingConsumer consumer, String user_id) throws IOException,
-			InterruptedException {
+	public String getMovementResponse(QueueingConsumer consumer, String user_id)
+			throws IOException, InterruptedException {
 		boolean response = false;
 		String room_name = null;
 		while (!response) {
-			Message message = movement.getSingleMessage(consumer);
+			Message message = getSingleMessage(consumer);
 			System.out.println(message.getTopic());
 			response = message.getTopic().equals("movement_successful");
+
 			response = response
 					&& message.getDetails().get("user_id").equals(user_id);
 			if (response) {
