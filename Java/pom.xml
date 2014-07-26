@@ -12,6 +12,8 @@
         <postgresql.client.version>9.1-901-1.jdbc4</postgresql.client.version>
         <rabbitmq.client.version>3.3.4</rabbitmq.client.version>
         <dropwizard.version>0.7.0</dropwizard.version>
+        <jetty.version>9.0.7.v20131107</jetty.version>
+        <atmosphere.version>2.1.7</atmosphere.version>
     </properties>
 
     <dependencies>
@@ -51,6 +53,18 @@
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-views-freemarker</artifactId>
             <version>${dropwizard.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.atmosphere</groupId>
+            <artifactId>atmosphere-jersey</artifactId>
+            <version>${atmosphere.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
+            <version>${jetty.version}</version>
         </dependency>
 
     </dependencies>
