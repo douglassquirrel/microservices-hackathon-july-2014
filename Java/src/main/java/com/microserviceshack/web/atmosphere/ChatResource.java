@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.microserviceshack.Movement;
 import com.microserviceshack.model.Room;
 import com.microserviceshack.repository.RoomManager;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.QueueingConsumer;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.annotation.Suspend;
 import org.atmosphere.cpr.*;
@@ -44,37 +46,48 @@ public class ChatResource {
     @Broadcast(writeEntity = false)
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response broadcast(Message message, AtmosphereResource ar) throws IOException {
-        if(isValid(message.message)) {
-            Command command = new Command(message.message);
-            switch(command.command) {
-                case JOIN: {
-                    movement.sendUserJoinedMessage(message.author);
-                    return new Response(message.author, "You joined as: " + message.author);
-                }
-                case MOVE: {
-                    movement.sendMoveMessage(message.author, command.arg1);
-                    return new Response(message.author, "Move to: " + command.arg1);
-                }
-                case ROOM: {
-                    Room room = roomManager.getRoom(command.arg1);
-                    return new Response(message.author, room.id + " " + room.room_description);
-                }
-                case ADJACENT: {
-                    List<Room> adjacentRooms = roomManager.getAdjacentRooms(command.arg1);
-                    return new Response(message.author, String.format("Adjacent rooms to %s are %s", command.arg1, "" + adjacentRooms));
-                }
-                case HELP: {
-                    String help = "";
-                    CMD[] values = CMD.values();
-                    for (CMD value : values) {
-                        help+=value.name().toLowerCase()+" ";
+    public Response broadcast(Message message, AtmosphereResource ar) throws IOException, InterruptedException {
+        Connection connection = movement.getConnection();
+        try {
+
+
+            if (isValid(message.message)) {
+                Command command = new Command(message.message);
+                switch (command.command) {
+                    case JOIN: {
+                        movement.sendUserJoinedMessage(message.author);
+                        return new Response(message.author, "You joined as: " + message.author);
                     }
-                    return new Response(message.author, help);
+                    case MOVE: {
+                        movement.sendMoveMessage(message.author, command.arg1);
+
+                        QueueingConsumer consumer = movement.getConsumer(connection);
+                        Optional<String> optRoom = Optional.ofNullable(movement.getMovementResponse(consumer, message.author));
+
+                        return new Response(message.author, optRoom.isPresent()?"Move to: " + optRoom.get():"Movement failed.");
+                    }
+                    case ROOM: {
+                        Room room = roomManager.getRoom(command.arg1);
+                        return new Response(message.author, room.id + " " + room.room_description);
+                    }
+                    case ADJACENT: {
+                        List<Room> adjacentRooms = roomManager.getAdjacentRooms(command.arg1);
+                        return new Response(message.author, String.format("Adjacent rooms to %s are %s", command.arg1, "" + adjacentRooms));
+                    }
+                    case HELP: {
+                        String help = "";
+                        CMD[] values = CMD.values();
+                        for (CMD value : values) {
+                            help += value.name().toLowerCase() + " ";
+                        }
+                        return new Response(message.author, help);
+                    }
                 }
             }
+            return new Response(message.author, "You've got an error there :) " + message.message);
+        } finally {
+            connection.close();
         }
-        return new Response(message.author, "You've got an error there :) "+ message.message);
     }
 
     private enum CMD {

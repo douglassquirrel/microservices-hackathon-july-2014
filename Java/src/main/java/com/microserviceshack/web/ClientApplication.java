@@ -1,5 +1,6 @@
 package com.microserviceshack.web;
 
+import com.microserviceshack.Movement;
 import com.microserviceshack.web.atmosphere.ChatResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
