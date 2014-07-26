@@ -83,7 +83,7 @@ public class ChatResource {
                     }
                 }
             }
-            return new Response(message.author, "You've got an error there :) " + message.message);
+            return new Response(message.author, message.message);
         } finally {
             connection.close();
         }

@@ -15,7 +15,7 @@ $(function () {
     var author = null;
     var logged = false;
     var socket = $.atmosphere;
-    var request = { url: 'http://localhost:8080/chat',
+    var request = { url: '/chat',
         contentType : "application/json",
         logLevel : 'debug',
         transport : 'websocket' ,
