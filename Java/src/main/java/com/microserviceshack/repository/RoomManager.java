@@ -3,6 +3,8 @@ package com.microserviceshack.repository;
 import com.microserviceshack.model.Room;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by gonka on 26/07/2014.
@@ -25,6 +27,21 @@ public class RoomManager {
             e.printStackTrace();
         }
         throw new RuntimeException("room not found!");
+    }
+
+    public List<Room> getAdjacentRooms(String roomid){
+            List<Room> adjrooms = new ArrayList();
+        try {
+            Connection connection = connectToDatabaseOrDie();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT content->>'room_two_name' FROM facts WHERE topic='door_created' AND content->>'room_one_name' = '" + roomid + "'");
+            while(resultSet.next()){
+                adjrooms.add(getRoom(resultSet.getString(1)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return adjrooms;
     }
 
 
@@ -54,8 +71,14 @@ public class RoomManager {
      * test
      */
     public static void main(String[] args) {
-        Room room_created = new RoomManager().getRoom("Atrium");
+        RoomManager roomManager = new RoomManager();
+        Room room_created = roomManager.getRoom("Atrium");
         System.out.println(room_created.room_description);
+        //
+        List<Room> garden = roomManager.getAdjacentRooms("Garden");
+        System.out.println(garden);
+
+
     }
 
 
