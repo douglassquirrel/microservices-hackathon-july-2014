@@ -21,9 +21,9 @@ public class ClientApplication extends Application<ClientConfiguration> {
     @Override
     public void run(ClientConfiguration clientConfiguration, Environment environment) throws Exception {
         AtmosphereServlet atmosphereServlet = new AtmosphereServlet();
-        atmosphereServlet.framework().addInitParameter("com.sun.jersey.config.property.packages", "es.microservices.client.atmosphere");
+        atmosphereServlet.framework().addInitParameter("com.sun.jersey.config.property.packages", "com.microserviceshack.web.atmosphere");
         atmosphereServlet.framework().addInitParameter("org.atmosphere.websocket.messageContentType", "application/json");
-        atmosphereServlet.framework().addInitParameter("org.atmosphere.cpr.broadcastFilterClasses", "es.microservices.client.atmosphere.BadWordFilter");
+        atmosphereServlet.framework().addInitParameter("org.atmosphere.cpr.broadcastFilterClasses", "com.microserviceshack.web.atmosphere.BadWordFilter");
         environment.servlets().addServlet("atmosphere",atmosphereServlet).addMapping("/chat/*");
 
 
