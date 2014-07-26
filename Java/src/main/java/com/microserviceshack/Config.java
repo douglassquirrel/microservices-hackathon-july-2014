@@ -1,5 +1,6 @@
 package com.microserviceshack;
 
+
 public class Config {
 
 	// Rabbit MQ Messaging
