@@ -14,10 +14,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,6 +32,8 @@ public class ChatResource {
     Movement movement = new Movement();
     RoomManager roomManager = new RoomManager();
 
+    Map<String,String> locations = new HashMap<>();
+
     @Suspend(contentType = MediaType.APPLICATION_JSON)
     @GET
     public String suspend() {
@@ -43,17 +45,76 @@ public class ChatResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response broadcast(Message message, AtmosphereResource ar) throws IOException {
-        if(message.message.startsWith("join")) {
-            movement.sendUserJoinedMessage(message.author);
-            return new Response(message.author,"You joined as: "+message.author);
-        } else if (message.message.startsWith("move")) {
-            String room = message.message.substring("move ".length());
-            movement.sendMoveMessage(message.author, room);
-            return new Response(message.author,"Move to: "+room);
-        } else if(message.message.startsWith("room")) {
-            Room room = roomManager.getRoom(message.message.substring("room ".length()));
-            return new Response(message.author, room.id+" "+room.room_description);
+        if(isValid(message.message)) {
+            Command command = new Command(message.message);
+            switch(command.command) {
+                case JOIN: {
+                    movement.sendUserJoinedMessage(message.author);
+                    return new Response(message.author, "You joined as: " + message.author);
+                }
+                case MOVE: {
+                    movement.sendMoveMessage(message.author, command.arg1);
+                    return new Response(message.author, "Move to: " + command.arg1);
+                }
+                case ROOM: {
+                    Room room = roomManager.getRoom(command.arg1);
+                    return new Response(message.author, room.id + " " + room.room_description);
+                }
+                case ADJACENT: {
+                    List<Room> adjacentRooms = roomManager.getAdjacentRooms(command.arg1);
+                    return new Response(message.author, String.format("Adjacent rooms to %s are %s", command.arg1, "" + adjacentRooms));
+                }
+                case HELP: {
+                    String help = "";
+                    CMD[] values = CMD.values();
+                    for (CMD value : values) {
+                        help+=value.name()+" ";
+                    }
+                    return new Response(message.author, help);
+                }
+            }
         }
-        return new Response(message.author, message.message);
+        return new Response(message.author, "You've got an error there :) "+ message.message);
+    }
+
+    private enum CMD {
+        MOVE,
+        ROOM,
+        ADJACENT,
+        JOIN,
+        HELP;
+    }
+
+    private boolean isValid(String cmd) {
+        String[] split = cmd.split(" ");
+        CMD[] values = CMD.values();
+        for (CMD value : values) {
+            if(value.name().toLowerCase().equals(split[0])) {
+               return true;
+            }
+        }
+        return false;
+    }
+
+    private class Command {
+        CMD command;
+        String arg1;
+        String arg2;
+
+        private Command(String cmd) {
+            String[] split = cmd.split(" ");
+            for (CMD value : CMD.values()) {
+                if(value.name().toLowerCase().equals(split[0])) {
+                    command = value;
+                }
+            }
+            if(split.length>1) {
+                arg1 = split[1];
+            }
+            if(split.length>2) {
+                arg2 = split[2];
+            }
+
+        }
     }
 }
