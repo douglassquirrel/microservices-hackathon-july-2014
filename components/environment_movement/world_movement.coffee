@@ -6,42 +6,33 @@ data_provider = require('./pg_connection')
 mq_server = 'amqp://54.76.183.35:5672'
 context = require('rabbit.js').createContext(mq_server);
 exchange_name = 'alex2'
-    
+
 connected_rooms = []
-user = {}
-    
+users = {}
+
+handlers = {
+    'door_created': (message)->
+        console.log(message)
+        connected_rooms.push(message)
+    'movement_successful': (message)->
+        console.log(message)
+        users[message.user_id].current_location = message.current_location
+}
+
 data_provider.getPreviousData( (data)->
-    
-    
-    connected_rooms  = data.filter((row)-> row.topic == 'door_created')
-                        .map((row)-> row.content )
-    
-    user.current_location = data.filter((row)-> row.topic == 'movement_successful')
-                                .map((row)-> row.content.room_name)
-                                .last()
-                                
-    console.log(connected_rooms)
+    for row in data 
+        handlers[row.topic]?(row.content)
 )
 
 context.on('ready', ->
-    door_created_sub = context.socket('SUB',{routing:'topic'})
     
-    door_created_sub.connect(exchange_name,'door_created',->
-        console.log('door_created listener')
-        door_created_sub.on('data',(message)->
-            console.log(message)
-            connected_rooms.push(JSON.parse(message))
+    Object.keys(handlers).forEach((handler_name)->
+        subscriber = context.socket('SUB',{routing:'topic'})
+        subscriber.connect(exchange_name,handler_name,->
+            console.log("#{handler_name} listener")
+            subscriber.on('data',(string_message)->
+                handlers[handler_name](JSON.parse(string_message))
+            )
         )
     )
-
-
-    movement_successful_sub = context.socket('SUB',{routing:'topic'})
-    movement_successful_sub.connect(exchange_name,'movement_successful',->
-        console.log('movement_successful listener')
-        movement_successful_sub.on('data',(message)->
-            message = JSON.parse(message)
-            user.current_location = message.current_location
-        )
-    )
-    
 )
