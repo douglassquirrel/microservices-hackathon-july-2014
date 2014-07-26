@@ -11,6 +11,15 @@ using RabbitMQ.Client.Events;
 
 namespace PlayerJoined
 {
+    public static class ListExtension
+    {
+        public static T GetRandomValue<T>(this List<T> list)
+        {
+            var index = new Random().Next(list.Count);
+            return list[index];
+        }
+    }
+
     public class PlayerJoined
     {
         static void Main(string[] args)
@@ -32,8 +41,16 @@ namespace PlayerJoined
                     channel.BasicConsume("user_joined", true, consumer);
                     while (true)
                     {
-                        var user = WaitForUserJoinedEvent(consumer);
-                        PlacePlayerInRoom(user, rooms, connection);
+                        try
+                        {
+                            var user = WaitForUserJoinedEvent(consumer);
+                            PlacePlayerInRoom(user, rooms, connection);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Something bad happened!");
+                            Console.WriteLine(e.ToString());
+                        }
                     }
                 }
             }
@@ -44,13 +61,14 @@ namespace PlayerJoined
             var movement = new MovementSuccesfull
             {
                 user_id = user.user_id,
-                room_name = rooms.FirstOrDefault().room_name
+                room_name = rooms.GetRandomValue().room_name
             };
             var newMessage = JsonConvert.SerializeObject(movement);
             var newBody = Encoding.UTF8.GetBytes(newMessage);
             using (var movementChannel = connection.CreateModel())
             {
                 movementChannel.BasicPublish("alex2", "movement_successful", null, newBody);
+                Console.WriteLine("Published event:" + " movement_successful " + newMessage);
             }
         }
 
