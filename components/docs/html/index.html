@@ -57,68 +57,24 @@ SELECT content FROM facts WHERE ts > '2014-07-26 11:00:00'
 
   <h2>Example Components</h2>
 
-  The current example implementation maintains a product catalogue for a retail
-  business.
+  The current example implementation maintains a simple
+  <a href="http://en.wikipedia.org/wiki/MUD">Multiple-User Dungeon</a>.
 
-    <h3>publisher</h3>
-      <p>
-        Command-line tool that accepts new products for publication. Run a
-        command like
-        <pre><code>
-./publisher.py 1234-78 "Spotted Paint" 45.98
-        </pre></code>
-        to create a new product.
-      </p>
+  <h3>Client</h3>
+    The client is a web-based mechanism for users to view data about the
+    rooms they visit, try to move between rooms, and see the results of their
+    movement.
 
-      <p>
-        Products are published in this format:
-        <pre><code>
-{"sku": "1234-78", "name": "Spotted Paint", "price": 45.98}
-        </pre></code>
-	The topic used is "new_products".
+  <h3>Room Management</h3>
+    This component allows users to create rooms with names and descriptions
+    and connect them to other rooms.
 
-    <h3>catalogue_printer</h3>
-      <p>
-        Command-line tool that prints the current product catalogue. Run
-        <code>./catalogue_printer.py</code> to print the current catalogue.
-      </p>
+  <h3>Movement</h3>
+    This component receives requests from users to move, decides whether
+    they can move or not, and publishes their movement (or failed movement).
 
-    <h3>catalogue_listener</h3>
-      <p>
-        Command-line tool that announces new products when added. Run
-        <code>./catalogue_listener.py</code> to see announcements.
-      </p>
-
-    <h3>vat_reckoner</h3>
-      <p>
-        Computes VAT on newly added products. Publishes the VAT in this
-	format:
-        <pre><code>
-{"sku": "1234-78", "vat": 9.20}
-        </pre></code>
-	The topic used is "vat".
-      </p>
-
-    <h3>shipping_reckoner</h3>
-      <p>
-        Computes shipping cost on newly added products. Publishes the shipping
-        cost in this format:
-        <pre><code>
-{"sku": "1234-78", "shipping": 5.00}
-        </pre></code>
-	The topic used is "shipping".
-      </p>
-
-    <h3>collater</h3>
-      <p>
-        Combines product, VAT, and shipping data into an expanded product
-        fact in this format:
-        <pre><code>
-{"sku": "1234-78", "name": "Spotted Paint", "price": 45.98,
- "vat": 9.20, "shipping": 5.00}
-        </pre></code>
-        The topic used is "products".
-      </p>
+  <h3>Overview</h3>
+    This component provides updates on all player movements.
 
 </body>
 </html>
