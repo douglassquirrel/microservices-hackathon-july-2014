@@ -23,7 +23,7 @@ $(function () {
 
 
     request.onOpen = function(response) {
-        content.html($('<p>', { text: 'Atmosphere connected using ' + response.transport }));
+        content.html($('<p>', { text: 'MUD client connected using ' + response.transport }));
         input.removeAttr('disabled').focus();
         status.text('Choose name:');
     };
