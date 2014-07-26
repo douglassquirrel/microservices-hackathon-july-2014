@@ -14,4 +14,11 @@ public class Room {
     }
 
 
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id='" + id + '\'' +
+                ", room_description='" + room_description + '\'' +
+                '}';
+    }
 }
