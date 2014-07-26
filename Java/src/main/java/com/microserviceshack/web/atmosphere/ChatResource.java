@@ -56,6 +56,7 @@ public class ChatResource {
                 switch (command.command) {
                     case JOIN: {
                         movement.sendUserJoinedMessage(message.author);
+
                         return new Response(message.author, "You joined as: " + message.author);
                     }
                     case MOVE: {
