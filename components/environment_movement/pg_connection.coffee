@@ -7,7 +7,7 @@ module.exports.getPreviousData = (callback)->
         if(err)
             return console.error('error fetching client from pool', err);
 
-        client.query("SELECT * from facts where topic = 'door_created'", (err, result)->
+        client.query("SELECT * from facts", (err, result)->
             #call `done()` to release the client back to the pool
             if(err)
                 console.error('error running query', err);
