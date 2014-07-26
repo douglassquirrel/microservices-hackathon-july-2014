@@ -3,8 +3,7 @@ package com.microserviceshack.rabbitmq;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microserviceshack.Config;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
