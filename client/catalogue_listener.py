@@ -19,7 +19,7 @@ channel.exchange_declare(exchange='alex2', type='topic')
 result = channel.queue_declare(exclusive=True)
 queue = result.method.queue
 
-channel.queue_bind(exchange='alex2', queue=queue, routing_key='new_products')
+channel.queue_bind(exchange='alex2', queue=queue, routing_key='hello')
 
 channel.basic_consume(announce, queue=queue, no_ack=True)
 channel.start_consuming()

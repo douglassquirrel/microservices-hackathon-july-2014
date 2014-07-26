@@ -1,0 +1,8 @@
+{
+  "name": "node_client",
+  "version": "0.0.1",
+  "dependencies": {
+    "pg": "^3.4.0",
+    "rabbit.js": "^0.4.1"
+  }
+}
