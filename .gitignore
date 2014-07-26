@@ -52,6 +52,7 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+<<<<<<< HEAD
 .idea
 node_modules
 ## Ignore Visual Studio temporary files, build results, and
@@ -237,3 +238,6 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 
+/target/
+
+.idea
