@@ -2,10 +2,7 @@ package com.microserviceshack.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microserviceshack.web.atmosphere.ChatResource;
-import com.microserviceshack.web.atmosphere.Message;
 import com.microserviceshack.web.atmosphere.Response;
-import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
 
 import javax.ws.rs.GET;

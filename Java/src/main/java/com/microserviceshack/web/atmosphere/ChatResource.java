@@ -1,6 +1,5 @@
 package com.microserviceshack.web.atmosphere;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.microserviceshack.Movement;
 import com.microserviceshack.model.Room;
 import com.microserviceshack.repository.RoomManager;
@@ -8,7 +7,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.QueueingConsumer;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.annotation.Suspend;
-import org.atmosphere.cpr.*;
+import org.atmosphere.cpr.AtmosphereResource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,10 +15,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created with IntelliJ IDEA.
