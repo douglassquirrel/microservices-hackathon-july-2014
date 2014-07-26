@@ -49,8 +49,6 @@ public class ChatResource {
     public Response broadcast(Message message, AtmosphereResource ar) throws IOException, InterruptedException {
         Connection connection = movement.getConnection();
         try {
-
-
             if (isValid(message.message)) {
                 Command command = new Command(message.message);
                 switch (command.command) {
