@@ -15,7 +15,7 @@ import java.util.Map;
 public class RoomManager {
 
 
-    Room getRoom(String roomid){
+    public Room getRoom(String roomid){
         try {
             Connection connection = connectToDatabaseOrDie();
             Statement statement = connection.createStatement();

@@ -1,5 +1,7 @@
 package com.microserviceshack.web.atmosphere;
 
+import com.microserviceshack.model.Room;
+import com.microserviceshack.repository.RoomManager;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.annotation.Suspend;
 
@@ -28,6 +30,8 @@ public class ChatResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response broadcast(Message message) {
-        return new Response(message.author, message.message);
+        RoomManager roomManager = new RoomManager();
+        Room room = roomManager.getRoom(message.message);
+        return new Response(message.author, room.id+" "+room.room_description);
     }
 }
