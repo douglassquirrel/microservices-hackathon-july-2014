@@ -32,8 +32,6 @@ public class ChatResource {
     Movement movement = new Movement();
     RoomManager roomManager = new RoomManager();
 
-    public static Map<String,Broadcaster> listeners = new HashMap<String,Broadcaster>();
-
     @Suspend(contentType = MediaType.APPLICATION_JSON)
     @GET
     public String suspend() {
@@ -45,12 +43,6 @@ public class ChatResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response broadcast(Message message, AtmosphereResource ar) throws IOException {
-        if(!listeners.containsKey(message.author)) {
-            Broadcaster broadcaster = BroadcasterFactory.getDefault().lookup("/*");
-            broadcaster.addBroadcasterListener(new BroadcasterListenerAdapter());
-            listeners.put(message.author,broadcaster);
-        }
-
         if(message.message.startsWith("join")) {
             movement.sendUserJoinedMessage(message.author);
             return new Response(message.author,"You joined as: "+message.author);

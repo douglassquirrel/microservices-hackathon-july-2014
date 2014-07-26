@@ -20,9 +20,8 @@ public class ClientResource {
     @GET
     public void client(@QueryParam("user") String user) throws JsonProcessingException {
 
-        Broadcaster broadcaster = ChatResource.listeners.get(user);
         String msg = new ObjectMapper().writeValueAsString(new Response("admin", "Hello!"));
-        broadcaster.broadcast(msg);
+        BroadcasterFactory.getDefault().lookup("/*").broadcast(msg);
 
     }
 
