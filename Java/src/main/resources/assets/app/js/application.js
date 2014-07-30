@@ -15,7 +15,7 @@ $(function () {
     var author = null;
     var logged = false;
     var socket = $.atmosphere;
-    var request = { url: 'http://localhost:8080/chat',
+    var request = { url: '/chat',
         contentType : "application/json",
         logLevel : 'debug',
         transport : 'websocket' ,
@@ -23,7 +23,7 @@ $(function () {
 
 
     request.onOpen = function(response) {
-        content.html($('<p>', { text: 'Atmosphere connected using ' + response.transport }));
+        content.html($('<p>', { text: 'MUD client connected using ' + response.transport }));
         input.removeAttr('disabled').focus();
         status.text('Choose name:');
     };

@@ -1,14 +1,14 @@
 package com.microserviceshack.rabbitmq;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microserviceshack.Config;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReceiveLogsTopic {
 

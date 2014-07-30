@@ -1,8 +1,8 @@
 package com.microserviceshack.web;
 
-import com.microserviceshack.Movement;
 import com.microserviceshack.web.atmosphere.ChatResource;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
@@ -16,6 +16,7 @@ public class ClientApplication extends Application<ClientConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ClientConfiguration> bootstrap) {
+        bootstrap.addBundle(new AssetsBundle("/assets/", "/assets"));
         bootstrap.addBundle(new ViewBundle());
     }
 
